@@ -1,0 +1,43 @@
+Given a string consisting of lowercase characters and an integer k, the task is to count all possible substrings (not necessarily distinct) that have exactly k distinct characters. 
+Examples :
+Input: s = "abc", k = 2
+Output: 2
+Explanation: Possible substrings are ["ab", "bc"]
+Input: s = "aba", k = 2
+Output: 3
+Explanation: Possible substrings are ["ab", "ba", "aba"]
+Input: s = "aa", k = 1
+Output: 3
+Explanation: Possible substrings are ["a", "a", "aa"]
+Constraints:
+1 ≤ s.size() ≤ 1e6
+1 ≤ k ≤ 26
+
+class Solution {
+  public:
+long long atMostK(const string& s, int k) {
+    int freq[26] = {0};
+    int distinct = 0;
+    int i = 0, j = 0, n = s.size();
+    long long count = 0;
+
+    while (i < n) {
+        if (freq[s[i] - 'a'] == 0) distinct++;
+        freq[s[i] - 'a']++;
+
+        while (distinct > k) {
+            freq[s[j] - 'a']--;
+            if (freq[s[j] - 'a'] == 0) distinct--;
+            j++;
+        }
+        count += (i - j + 1);
+        i++;
+    }
+    return count;
+}
+
+long long countSubstr(const string& s, int k) {
+        if (k == 0) return 0;
+        return atMostK(s, k) - atMostK(s, k - 1);
+}
+};
